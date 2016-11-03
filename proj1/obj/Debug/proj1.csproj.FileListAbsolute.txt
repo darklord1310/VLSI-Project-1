@@ -1,0 +1,9 @@
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\bin\Debug\proj1.exe.config
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\bin\Debug\proj1.exe
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\bin\Debug\proj1.pdb
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\obj\Debug\proj1.csprojResolveAssemblyReference.cache
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\obj\Debug\proj1.Form1.resources
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\obj\Debug\proj1.Properties.Resources.resources
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\obj\Debug\proj1.csproj.GenerateResource.Cache
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\obj\Debug\proj1.exe
+C:\Users\Jet\Desktop\VLSI Project 1\proj1\proj1\obj\Debug\proj1.pdb
