@@ -13,46 +13,74 @@ namespace proj1
         private int terminalNodeCount = 0;      // terminal node count
         private int totalNodeCount = 0;     // total node count
         private int nonTerminalCount = 0;   // non terminal node count
+        public int largestTermArea = 0;
+        public int smallestTermArea = 0;
+        public int largestNonTermArea = 0;
+        public int smallestNonTermArea = 0;
         private string nodesPath = "";
         private string[] lines;
-        private string largestNonTermNode = "";
-        private string smallestNonTermNode = "";
-        private string largestTermNode = "";
-        private string smallestTermNode = "";
+        private List<string> largestNonTermNode = new List<string>();
+        private List<string> smallestNonTermNode = new List<string>();
+        private List<string> largestTermNode = new List<string>();
+        private List<string> smallestTermNode = new List<string>();
         private int totalWidthOfNonTermNodes = 0;
+        private int totalHeightOfNonTermNodes = 0;
         private List<Node> Nodes = new List<Node>();
+
+        public NodesOperation()
+        {
+        }
 
         public NodesOperation(string path)
         {
-            this.nodesPath = path;
-            try
-            {
-                lines = File.ReadAllLines(@nodesPath, Encoding.UTF8);
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            readFileFromPath(path);
         }
 
-
-        // to be implement
-        public void readFromPath(string path)
+        private void resetAllParams()
         {
+            terminalNodeCount = 0;     
+            totalNodeCount = 0;     
+            nonTerminalCount = 0;   
+            largestTermArea = 0;
+            smallestTermArea = 0;
+            largestNonTermArea = 0;
+            smallestNonTermArea = 0;
+
+            largestNonTermNode.Clear();
+            smallestNonTermNode.Clear();
+            largestTermNode.Clear();
+            smallestTermNode.Clear();
+            totalWidthOfNonTermNodes = 0;
+            totalHeightOfNonTermNodes = 0;
+            Nodes.Clear();
+        }
+
+        public void readFileFromPath(string path)
+        {
+            if (nodesPath != path)
+            {
+                this.nodesPath = path;
+                resetAllParams();
+
+                try
+                {
+                    lines = File.ReadAllLines(@path, Encoding.UTF8);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
 
         private void findTerminalOrNonTerminalNodes()
-        {
-            int largestTermArea = 0;
-            int smallestTermArea = 0;
-            int largestNonTermArea = 0;
-            int smallestNonTermArea = 0;
+        {           
             foreach (string line in lines)
             {
                 Regex termNodesPattern = new Regex(@"^NumTerminals :\s+(\d+)");
                 Regex totalNodesPattern = new Regex(@"^NumNodes :\s+(\d+)");
                 Regex terminalNodeInfo = new Regex(@"(o\d+)\s+(\d+)\s+(\d+)\s+(\w+)");
-                Regex nonTerminalNodeInfo = new Regex(@"(o\d+)\s+(\d+)\s+(\d+)");
+                Regex nonTerminalNodeInfo = new Regex(@"(o\d+)\s+(\d+)\s+(\d+)$");
                 Match numNodesMatch = termNodesPattern.Match(line);
                 Match totalNodesMatch = totalNodesPattern.Match(line);
                 Match terminalInfomatch = terminalNodeInfo.Match(line);
@@ -71,27 +99,34 @@ namespace proj1
                     int h = Convert.ToInt16(nonTerminalInfomatch.Groups[3].Value);
                     string type = "Non Terminal";
                     int area = w * h;
-                    
+
+                    if (area == largestNonTermArea)
+                        largestNonTermNode.Add(name);
+
                     if (area > largestNonTermArea)
                     {
-                        largestNonTermNode = name;
+                        largestNonTermNode.Clear();
+                        largestNonTermNode.Add(name);
                         largestNonTermArea = area;
                     }
 
                     if (smallestNonTermArea == 0)
-                    {
                         smallestNonTermArea = area;
-                        smallestNonTermNode = name;
-                    }
-                    else if(area < smallestNonTermArea)
+
+                    if (smallestNonTermArea == area)
+                        smallestNonTermNode.Add(name);
+
+                    if (area < smallestNonTermArea)
                     {
+                        smallestNonTermNode.Clear();
+                        smallestNonTermNode.Add(name);
                         smallestNonTermArea = area;
-                        smallestNonTermNode = name;
                     }
 
                     Node newNode = new Node(name, type, w, h);
                     Nodes.Add(newNode);
                     totalWidthOfNonTermNodes += w;
+                    totalHeightOfNonTermNodes += h;
                 }
 
                 if (terminalInfomatch.Success)
@@ -102,71 +137,83 @@ namespace proj1
                     string type = terminalInfomatch.Groups[4].Value;
                     int area = w * h;
 
+                    if (area == largestTermArea)
+                        largestTermNode.Add(name);
+
                     if (area > largestTermArea)
                     {
-                        largestTermNode = name;
+                        largestTermNode.Clear();
+                        largestTermNode.Add(name);
                         largestTermArea = area;
                     }
 
                     if (smallestTermArea == 0)
-                    {
                         smallestTermArea = area;
-                        smallestTermNode = name;
-                    }
-                    else if (area < smallestTermArea)
+
+                    if (smallestTermArea == area)
+                        smallestTermNode.Add(name);
+
+                    if (area < smallestTermArea)
                     {
+                        smallestTermNode.Clear();
+                        smallestTermNode.Add(name);
                         smallestTermArea = area;
-                        smallestTermNode = name;
                     }
 
                     Node newNode = new Node(name,type,w,h);
                     Nodes.Add(newNode);
-                    totalWidthOfNonTermNodes += w;
                 }
             }
             nonTerminalCount = totalNodeCount - terminalNodeCount;
         }
 
-        public string getSmallestTerminalNode()
+        public List<string> getSmallestTerminalNode()
         {
-            if (smallestTermNode == "")
+            if (smallestTermNode.Count == 0)
                 findTerminalOrNonTerminalNodes();
 
             return smallestTermNode;
         }
 
-        public string getSmallestNonTerminalNode()
+        public List<string> getSmallestNonTerminalNode()
         {
-            if (smallestNonTermNode == "")
+            if (smallestNonTermNode.Count == 0)
                 findTerminalOrNonTerminalNodes();
 
             return smallestNonTermNode;
         }
 
 
-        public string getLargestTerminalNode()
+        public List<string> getLargestTerminalNode()
         {
-            if (largestTermNode == "")
+            if (largestTermNode.Count == 0)
                 findTerminalOrNonTerminalNodes();
 
             return largestTermNode;
         }
 
-        public string getLargestNonTerminalNode()
+        public List<string> getLargestNonTerminalNode()
         {
-            if (largestNonTermNode == "")
+            if (largestNonTermNode.Count == 0)
                 findTerminalOrNonTerminalNodes();
 
-            return largestNonTermNode;
-            
+            return largestNonTermNode;            
         }
 
-        public int getTotalLengthNonTermNodes()
+        public int getTotalWidthNonTermNodes()
         {
             if (totalWidthOfNonTermNodes == 0)
                 findTerminalOrNonTerminalNodes();
 
             return totalWidthOfNonTermNodes;
+        }
+
+        public int getTotalHeightNonTermNodes()
+        {
+            if (totalHeightOfNonTermNodes == 0)
+                findTerminalOrNonTerminalNodes();
+
+            return totalHeightOfNonTermNodes;
         }
 
         public int getNoOfTerminalNode()
@@ -183,6 +230,11 @@ namespace proj1
                 findTerminalOrNonTerminalNodes();
 
             return nonTerminalCount;
+        }
+
+        public List<Node> getAllNodes()
+        {
+            return Nodes;
         }
     }
 }

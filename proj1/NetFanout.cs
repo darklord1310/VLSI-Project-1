@@ -19,6 +19,28 @@ namespace proj1
             coordx = x;
         }
 
+        public NetFanout()
+        {
+            fanoutName = "";
+            coordy = 0;
+            coordx = 0;
+        }
+
+        public void setFanoutName(string n)
+        {
+            fanoutName = n;
+        }
+
+        public void setCoordX(double x)
+        {
+            coordx = x;
+        }
+
+        public void setCoordY(double y)
+        {
+            coordy = y;
+        }
+
         public string getFanoutName() { return fanoutName; }
         public double getCoordX() { return coordx; }
         public double getCoordY() { return coordy; }

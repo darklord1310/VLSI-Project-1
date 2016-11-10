@@ -13,7 +13,9 @@ namespace proj1
 {
     public partial class Form1 : Form
     {
-        string nodeFilePath, netFilePath;
+        string nodeFilePath = "", netFilePath = "" ,fileName;
+        NodesOperation node = new NodesOperation();
+        NetsOperation net = new NetsOperation();
 
         public Form1()
         {
@@ -30,53 +32,107 @@ namespace proj1
             DialogResult dr = dialog.ShowDialog();
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
+                fileName = dialog.SafeFileName.Remove(dialog.SafeFileName.IndexOf('.'));
                 nodeFilePath = dialog.FileName;
+                node.readFileFromPath(nodeFilePath);
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            NodesOperation node = new NodesOperation(nodeFilePath);
-            NetsOperation net = new NetsOperation(netFilePath);
-            StringBuilder s = new StringBuilder();
-            s.AppendLine("Number of non terminal node: " + node.getNoOfNonTerminalNode());
-            s.AppendLine("Number of terminal node: " + node.getNoOfTerminalNode());
-            s.AppendLine("Total Length Of Non Terminal Node: " + node.getTotalLengthNonTermNodes().ToString());
-            s.AppendLine("Largest terminal node: " + node.getLargestTerminalNode());
-            s.AppendLine("Smallest terminal node: " + node.getSmallestTerminalNode());
-            s.AppendLine("Largest non terminal node: " + node.getLargestNonTerminalNode());
-            s.AppendLine("Smallest non terminal node: " + node.getSmallestNonTerminalNode());
-            s.AppendLine("Total number of nets: " + net.getTotalNets().ToString());
-            
-            List<Net> temp = net.getMaxDegreeNetPair();
-            s.AppendLine("All Nets with highest degree: ");
-            foreach (Net n in temp)
+            if(nodeFilePath != "" && netFilePath != "")
             {
-                s.AppendLine(n.getNetDegree().ToString() + " " + n.getNetName());
-            }
+                Cursor.Current = Cursors.WaitCursor;
+                StringBuilder s = new StringBuilder();
+                s.AppendLine("Number of Non Terminal Node : " + node.getNoOfNonTerminalNode());
+                s.AppendLine("Number of Terminal Node : " + node.getNoOfTerminalNode());
+                s.AppendLine("Total Height Of Non Terminal Node : " + node.getTotalHeightNonTermNodes().ToString());
+                s.AppendLine("Total Width Of Non Terminal Node : " + node.getTotalWidthNonTermNodes().ToString());
+                List<string> temp = node.getLargestTerminalNode();
+                s.AppendLine("Largest terminal node : " + node.largestTermArea.ToString());
+                foreach (string val in temp) { s.AppendLine("\t" + val); }
+                temp.Clear();
+                temp = node.getSmallestTerminalNode();
+                s.AppendLine("Smallest terminal node : " + node.smallestTermArea.ToString());
+                foreach (string val in temp) { s.AppendLine("\t" + val); }
+                temp.Clear();
+                temp = node.getLargestNonTerminalNode();
+                s.AppendLine("Largest non terminal node : " + node.largestNonTermArea.ToString());
+                foreach (string val in temp) { s.AppendLine("\t" + val); }
+                temp.Clear();
+                temp = node.getSmallestNonTerminalNode();
+                s.AppendLine("Smallest non terminal node : " + node.smallestNonTermArea.ToString());
+                foreach (string val in temp) { s.AppendLine("\t" + val); }
+                temp.Clear();
 
-            s.AppendLine("Total number of input pins: " + net.getTotalInputPins().ToString());
-            s.AppendLine("Total number of output pins: " + net.getTotalOutputPins().ToString());
+                s.AppendLine("Total number of nets : " + net.getTotalNets().ToString());
+                s.AppendLine("All Nets with highest degree : " + net.getMaxDegreeNetPair());
+                s.AppendLine("Total number of input pins : " + net.getTotalInputPins().ToString());
+                s.AppendLine("Total number of output pins : " + net.getTotalOutputPins().ToString());
 
-            /*
-            List<Net> temp2 = net.getAllNetsInfo();
-            foreach (Net n in temp)
-            {
-                Console.WriteLine(n.getNetName() + " " + n.getNetName() );
-                Console.WriteLine("Input Nodes");
-                foreach(NetFanout f in n.getInputNodes())
+                /*
+                List<Net> temp2 = net.getAllNetsInfo();
+                foreach (Net n in temp)
                 {
-                    Console.WriteLine(f.getFanoutName() + " " + f.getCoordX() + " " + f.getCoordY());
+                    Console.WriteLine(n.getNetName() + " " + n.getNetName() );
+                    Console.WriteLine("Input Nodes");
+                    foreach(NetFanout f in n.getInputNodes())
+                    {
+                        Console.WriteLine(f.getFanoutName() + " " + f.getCoordX() + " " + f.getCoordY());
+                    }
+                    Console.WriteLine("Output Node");
+                    Console.WriteLine(n.getOutputNodes().getFanoutName() + " " + n.getOutputNodes().getCoordX() + " " + n.getOutputNodes().getCoordY());
                 }
-                Console.WriteLine("Output Node");
-                Console.WriteLine(n.getOutputNodes().getFanoutName() + " " + n.getOutputNodes().getCoordX() + " " + n.getOutputNodes().getCoordY());
+                */
+
+                string str = net.displayHistogramOfConnectivity();
+                s.AppendLine(str);
+                Cursor.Current = Cursors.Default;
+                JR.Utils.GUI.Forms.FlexibleMessageBox.Show(s.ToString());
             }
-            */
+        }
 
-            string str = net.displayHistogramOfConnectivity();
-            s.AppendLine(str);
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            StringBuilder s = new StringBuilder();
+            using (StreamWriter writer = new StreamWriter(fileName + ".rpt", false))
+            {
+                if (nodeFilePath != "" && netFilePath != "")
+                {
+                    s.AppendLine("Number of Non Terminal Node : " + node.getNoOfNonTerminalNode());
+                    s.AppendLine("Number of Terminal Node : " + node.getNoOfTerminalNode());
+                    s.AppendLine("Total Height Of Non Terminal Node : " + node.getTotalHeightNonTermNodes().ToString());
+                    s.AppendLine("Total Width Of Non Terminal Node : " + node.getTotalWidthNonTermNodes().ToString());
+                    List<string> temp = node.getLargestTerminalNode();
+                    s.AppendLine("Largest terminal node : " + node.largestTermArea.ToString());
+                    foreach (string val in temp) { s.AppendLine("\t" + val); }
+                    temp.Clear();
+                    temp = node.getSmallestTerminalNode();
+                    s.AppendLine("Smallest terminal node : " + node.smallestTermArea.ToString());
+                    foreach (string val in temp) { s.AppendLine("\t" + val); }
+                    temp.Clear();
+                    temp = node.getLargestNonTerminalNode();
+                    s.AppendLine("Largest non terminal node : " + node.largestNonTermArea.ToString());
+                    foreach (string val in temp) { s.AppendLine("\t" + val); }
+                    temp.Clear();
+                    temp = node.getSmallestNonTerminalNode();
+                    s.AppendLine("Smallest non terminal node : " + node.smallestNonTermArea.ToString());
+                    foreach (string val in temp) { s.AppendLine("\t" + val); }
+                    temp.Clear();
 
-            JR.Utils.GUI.Forms.FlexibleMessageBox.Show(s.ToString());
+                    s.AppendLine("Total number of nets : " + net.getTotalNets().ToString());
+                    s.AppendLine("All Nets with highest degree : " + net.getMaxDegreeNetPair());
+                    s.AppendLine("Total number of input pins : " + net.getTotalInputPins().ToString());
+                    s.AppendLine("Total number of output pins : " + net.getTotalOutputPins().ToString());
+
+                    string str = net.displayHistogramOfConnectivity();
+                    s.AppendLine(str);
+                }
+
+                writer.WriteLine(s.ToString());
+            }
+            Cursor.Current = Cursors.Default;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -90,6 +146,7 @@ namespace proj1
             if (dr == System.Windows.Forms.DialogResult.OK)
             {
                 netFilePath = dialog.FileName;
+                net = new NetsOperation(netFilePath);
             }
         }
     }
