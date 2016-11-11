@@ -43,6 +43,7 @@ namespace proj1
             if(nodeFilePath != "" && netFilePath != "")
             {
                 StringBuilder s = new StringBuilder();
+                button3.Enabled = false;
                 Cursor.Current = Cursors.WaitCursor;
                 s.AppendLine("Number of Non Terminal Node : " + node.getNoOfNonTerminalNode());
                 s.AppendLine("Number of Terminal Node : " + node.getNoOfTerminalNode());
@@ -90,18 +91,20 @@ namespace proj1
                 string str = net.displayHistogramOfConnectivity();
                 s.AppendLine(str);
                 Cursor.Current = Cursors.Default;
+                button3.Enabled = true;
                 JR.Utils.GUI.Forms.FlexibleMessageBox.Show(s.ToString());
             }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            Cursor.Current = Cursors.WaitCursor;
             StringBuilder s = new StringBuilder();
             using (StreamWriter writer = new StreamWriter(fileName + ".rpt", false))
             {
                 if (nodeFilePath != "" && netFilePath != "")
                 {
+                    Cursor.Current = Cursors.WaitCursor;
+                    button4.Enabled = true;
                     s.AppendLine("Number of Non Terminal Node : " + node.getNoOfNonTerminalNode());
                     s.AppendLine("Number of Terminal Node : " + node.getNoOfTerminalNode());
                     s.AppendLine("Total Height Of Non Terminal Node : " + node.getTotalHeightNonTermNodes().ToString());
@@ -135,6 +138,7 @@ namespace proj1
                 writer.WriteLine(s.ToString());
             }
             Cursor.Current = Cursors.Default;
+            button4.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
