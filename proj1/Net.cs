@@ -13,6 +13,10 @@ namespace proj1
         private List<NetFanout> inputNodes;
         private NetFanout outputNodes;
 
+        public Net ()
+        {
+
+        }
         public Net (string n, int d)
         {
             netName = n;

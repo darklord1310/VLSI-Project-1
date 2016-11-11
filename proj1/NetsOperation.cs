@@ -60,7 +60,6 @@ namespace proj1
 
         private void NetOperations()
         {
-            string prevNetName = "empty net";
             string netName = "";
             int netDegree = 0;
             int largestNetDegree = 0;
@@ -68,7 +67,7 @@ namespace proj1
             double coordy = 0;
             string fanoutName = "";
             string fanoutType = "";
-            Net net = new Net(netName,netDegree);
+            Net net = new Net();
 
             foreach (string line in lines)
             {
@@ -104,6 +103,7 @@ namespace proj1
                     }
 
                     net = new Net(netName, netDegree);
+                    Nets.Add(net);
                 }
 
                 if (netInfoMatch.Success)
@@ -123,12 +123,12 @@ namespace proj1
                     NetFanout fanout = new NetFanout(fanoutName, coordx, coordy);
                     if (fanoutType.Equals("I"))
                     {
-                        net.addInputNodes(fanout);
+                        Nets.Last().addInputNodes(fanout);
                         totalInputPins++;
                     }
                     else
                     {
-                        net.setOutputNodes(fanout);
+                        Nets.Last().setOutputNodes(fanout);
                         totalOutputPins++;
                     }
                 }
@@ -170,20 +170,22 @@ namespace proj1
             return totalNumberOfNets;
         }
 
-        public List<Net> getAllNetsInfo()
+        public List<Net> getAllNets()
         {
             return Nets;
         }
         public string displayHistogramOfConnectivity()
         {
+            string temp = "";
             string output = "";
+            string format = "{0,-12}{1,-1}{2,-12}";
             if (NetDegreeCountPair.Count != 0)
             {
-                output = "Net Degree\t|\tNumber of Nets\n";
-
+                output += string.Format(format,"Net Degree", "|", "Number of Nets\n");
                 foreach (KeyValuePair<int, int> p in NetDegreeCountPair)
                 {
-                    output += "\t" + p.Key.ToString() + "\t \t" + p.Value.ToString() + "\n";
+                    temp = string.Format(format, p.Key.ToString(), "|", p.Value.ToString());
+                    output += temp + "\n";
                 } 
             }
             return output;

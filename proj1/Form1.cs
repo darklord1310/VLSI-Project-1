@@ -42,8 +42,8 @@ namespace proj1
         {
             if(nodeFilePath != "" && netFilePath != "")
             {
-                Cursor.Current = Cursors.WaitCursor;
                 StringBuilder s = new StringBuilder();
+                Cursor.Current = Cursors.WaitCursor;
                 s.AppendLine("Number of Non Terminal Node : " + node.getNoOfNonTerminalNode());
                 s.AppendLine("Number of Terminal Node : " + node.getNoOfTerminalNode());
                 s.AppendLine("Total Height Of Non Terminal Node : " + node.getTotalHeightNonTermNodes().ToString());
@@ -70,9 +70,11 @@ namespace proj1
                 s.AppendLine("Total number of input pins : " + net.getTotalInputPins().ToString());
                 s.AppendLine("Total number of output pins : " + net.getTotalOutputPins().ToString());
 
+                //List<Net> temp2 = net.getAllNets();
+                //Console.WriteLine(temp2.Count.ToString());
+                
                 /*
-                List<Net> temp2 = net.getAllNetsInfo();
-                foreach (Net n in temp)
+                foreach (Net n in temp2)
                 {
                     Console.WriteLine(n.getNetName() + " " + n.getNetName() );
                     Console.WriteLine("Input Nodes");

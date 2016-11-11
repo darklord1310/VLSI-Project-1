@@ -73,7 +73,7 @@ namespace proj1
             }
         }
 
-        private void findTerminalOrNonTerminalNodes()
+        private void nodesOperation()
         {           
             foreach (string line in lines)
             {
@@ -170,7 +170,7 @@ namespace proj1
         public List<string> getSmallestTerminalNode()
         {
             if (smallestTermNode.Count == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return smallestTermNode;
         }
@@ -178,7 +178,7 @@ namespace proj1
         public List<string> getSmallestNonTerminalNode()
         {
             if (smallestNonTermNode.Count == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return smallestNonTermNode;
         }
@@ -187,7 +187,7 @@ namespace proj1
         public List<string> getLargestTerminalNode()
         {
             if (largestTermNode.Count == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return largestTermNode;
         }
@@ -195,7 +195,7 @@ namespace proj1
         public List<string> getLargestNonTerminalNode()
         {
             if (largestNonTermNode.Count == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return largestNonTermNode;            
         }
@@ -203,7 +203,7 @@ namespace proj1
         public int getTotalWidthNonTermNodes()
         {
             if (totalWidthOfNonTermNodes == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return totalWidthOfNonTermNodes;
         }
@@ -211,7 +211,7 @@ namespace proj1
         public int getTotalHeightNonTermNodes()
         {
             if (totalHeightOfNonTermNodes == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return totalHeightOfNonTermNodes;
         }
@@ -219,7 +219,7 @@ namespace proj1
         public int getNoOfTerminalNode()
         {
             if (terminalNodeCount == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return terminalNodeCount;
         }
@@ -227,7 +227,7 @@ namespace proj1
         public int getNoOfNonTerminalNode()
         {
             if (nonTerminalCount == 0)
-                findTerminalOrNonTerminalNodes();
+                nodesOperation();
 
             return nonTerminalCount;
         }
